@@ -13,7 +13,7 @@ Options::Options()
     argC = 0;
     argV = NULL;
     optstring = "";
-    count = 1; 			//count is the iterator used to select argV
+    count = 0; 			//count is the iterator used to select argV
 }
 
 Options::~Options()
@@ -24,7 +24,7 @@ Options::~Options()
 //reads in the valid options from main
 void Options::setOptstring(string validopt)
 {
-	//getopt() can't reset count, so rather here than a explicit function
+	//getopt() can't reset count, so rather here than an explicit function
 	count = 0;
 	optstring = validopt;
 }
@@ -41,3 +41,8 @@ int Options::numopt(void)
 		count = 0;
 		return number;
 	}
+
+// this was needed in order to not call setOptstring() only to reset count
+void Options::resetcounter(void) {
+	count = 0;
+}

@@ -14,6 +14,7 @@ public:
 	void setOptstring(string validopt);
 	virtual string getopt(void) = 0;	//=0 makes the class abstract
 	int numopt(void);
+	void resetcounter(void);
 };
 
 #endif /* OPTIONS_H_ */

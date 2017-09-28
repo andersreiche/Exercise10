@@ -12,7 +12,7 @@ OptChars::OptChars(int argc, const char **argv)
 	argC = argc;
 	argV = (char**) argv;
 	optstring = "";
-	count = 1;
+	count = 0;
 }
 
 

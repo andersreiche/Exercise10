@@ -89,12 +89,15 @@ int main(int argc, char** argv) {
 
 		///////////////////// RUN THE OPTIONS /////////////////////////
 
+		// resets the argument counters to 0
+		opt.resetcounter();
+		opt2.resetcounter();
+
 		// loop out the '-' commands.
 		if (args != 0) {
 			for (int o = 1; o <= args; o++) {
 				string str = opt.getopt();
 				if (str == "f") {			// check for the -f option
-					cout << "DEBUG: str was == f" << endl;
 					// next option is the filename
 					string filename;
 					for (int a = 1; a < argc; a++) {
