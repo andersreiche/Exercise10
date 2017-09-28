@@ -4,6 +4,7 @@
 #include "Options.h"
 #include <sstream>
 #include <fstream>
+#include <string.h>
 using namespace std;
 OptChars opt;
 OptWord opt2;
@@ -62,7 +63,7 @@ int main(int argc, char** argv) {
 			cout << "Valid chars on cmdline: " << args << endl;
 			for (int o = 1; o <= args; o++) {
 				string str = opt.getopt();
-				if (str != "INVALID")			//don't want to spam "INVALID"
+				if (str != "INVALID") //don't want to spam "INVALID"
 						{
 					cout << "Found match: -" << str << endl;
 				}
@@ -77,7 +78,7 @@ int main(int argc, char** argv) {
 				opt2.setOptstring(validWords[j]);
 				for (int o = 1; o <= WordArgs; o++) {
 					string str = opt2.getopt();
-					if (str != "INVALID")		//don't want to spam "INVALID"
+					if (str != "INVALID") //don't want to spam "INVALID"
 							{
 						cout << "Found match: -" << str << endl;
 					}
@@ -112,22 +113,29 @@ int main(int argc, char** argv) {
 					string str = opt2.getopt();
 					if (str == "file")		// check for the --file option
 							{
-						cout << "DEBUG: str was == file" << endl;
 						// next option is the filename
-						string filename = opt2.getopt();
-						fstream myfile((filename).c_str());
-
-
+						string filename;
+						for (int a = 1; a < argc; a++) {
+							if (string(argv[a]) == "--file") {
+								filename = string(argv[a + 1]);
+							}
+						}
+						fstream myfile;
+						myfile.open((filename).c_str(),
+								fstream::in | fstream::out | fstream::app);
 						if (myfile.is_open()) {
-							cout << "DEBUG: file was opened!" << endl;
+
+							// read and print to consle
 							string line;
-							while (getline(myfile, line)) {
+							while (myfile.eof() == 0) {
+								getline(myfile, line);
 								cout << line << endl;
 							}
 
-							time_t  timev;
-							time(&timev);
-							myfile << timev;
+							// get time and print to file
+							time_t T;  				//create a time variable
+							time(&T); 				//write time to T
+							myfile << ctime(&T); 	// formats the timestamp
 							myfile.close();
 						}
 					}
