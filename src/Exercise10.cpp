@@ -5,6 +5,7 @@
 #include <sstream>
 #include <fstream>
 #include <string.h>
+#include <ctime>
 using namespace std;
 OptChars opt;
 OptWord opt2;
@@ -92,13 +93,38 @@ int main(int argc, char** argv) {
 		if (args != 0) {
 			for (int o = 1; o <= args; o++) {
 				string str = opt.getopt();
-				if (str == "f")			// check for the -f option
-						{
+				if (str == "f") {			// check for the -f option
+					cout << "DEBUG: str was == f" << endl;
+					// next option is the filename
+					string filename;
+					for (int a = 1; a < argc; a++) {
+						if (string(argv[a]) == "-f") {
+							filename = string(argv[a + 1]);
+						}
+					}
+					// initialize a filestream and open it with filename
+					fstream myfile;
+					myfile.open((filename).c_str(),
+							fstream::in | fstream::out | fstream::app);
 
-					// check what argument comes after f
-					// open file with that name
-					// append date to file and close
+					// if file exists
+					if (myfile.is_open()) {
 
+						// read and print to consle
+						string line;
+						while (myfile.eof() == 0) {
+							getline(myfile, line);
+							cout << line << endl;
+						}
+						// after input operation, failbit is set
+						// clear removes failbit so we can write to file
+						myfile.clear();
+						// get time and print to file
+						time_t T;  				//create a time variable
+						time(&T); 				//write time to T
+						myfile << ctime(&T); 	// formats the timestamp
+						myfile.close();
+					}
 				}
 			}
 
@@ -120,9 +146,12 @@ int main(int argc, char** argv) {
 								filename = string(argv[a + 1]);
 							}
 						}
+						// initialize a filestream and open it with filename
 						fstream myfile;
 						myfile.open((filename).c_str(),
 								fstream::in | fstream::out | fstream::app);
+
+						// if file exists
 						if (myfile.is_open()) {
 
 							// read and print to consle
@@ -131,7 +160,9 @@ int main(int argc, char** argv) {
 								getline(myfile, line);
 								cout << line << endl;
 							}
-
+							// after input operation, failbit is set
+							// clear removes failbit so we can write to file
+							myfile.clear();
 							// get time and print to file
 							time_t T;  				//create a time variable
 							time(&T); 				//write time to T
